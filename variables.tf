@@ -35,6 +35,6 @@ variable "private_subnet_2_cidr" {
 }
 
 variable "my_ip" {
-  description = "Public IP address for SSH access to bastion (format: #.#.#.#/#)"
+  description = "Public IP address for SSH access to bastion (format: #.#.#.#/32)"
   type        = string
 }
