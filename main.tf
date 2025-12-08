@@ -105,22 +105,22 @@ resource "aws_internet_gateway" "igw" {
 #####################################
 
 # Elastic IP 1
-resource "aws_eip" "eip_1" {
+resource "aws_eip" "eip_nat_1" {
   domain = "vpc"
 
   tags = {
-    Name = "techcorp-nat-eip-1"
+    Name = "techcorp-eip-nat-1"
   }
 
   depends_on = [aws_internet_gateway.igw]
 }
 
 # Elastic IP 2
-resource "aws_eip" "eip_2" {
+resource "aws_eip" "eip_nat_2" {
   domain = "vpc"
 
   tags = {
-    Name = "techcorp-nat-eip-2"
+    Name = "techcorp-eip-nat-2"
   }
   depends_on = [aws_internet_gateway.igw]
 }
@@ -131,7 +131,7 @@ resource "aws_eip" "eip_2" {
 
 # NAT Gateway 1
 resource "aws_nat_gateway" "nat_1" {
-  allocation_id     = aws_eip.eip_1.id
+  allocation_id     = aws_eip.eip_nat_1.id
   connectivity_type = "public"
   subnet_id         = aws_subnet.public_subnet_1.id
 
@@ -144,7 +144,7 @@ resource "aws_nat_gateway" "nat_1" {
 
 # NAT Gateway 2
 resource "aws_nat_gateway" "nat_2" {
-  allocation_id     = aws_eip.eip_2.id
+  allocation_id     = aws_eip.eip_nat_2.id
   connectivity_type = "public"
   subnet_id         = aws_subnet.public_subnet_2.id
 
