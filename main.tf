@@ -44,9 +44,10 @@ data "aws_availability_zones" "available" {
 
 # Public subnet 1
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id            = aws_vpc.vpc_main.id
-  cidr_block        = var.public_subnet_1_cidr
-  availability_zone = data.aws_availability_zones.available.names[0]
+  vpc_id                  = aws_vpc.vpc_main.id
+  cidr_block              = var.public_subnet_1_cidr
+  availability_zone       = data.aws_availability_zones.available.names[0]
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "techcorp-public-subnet-1"
@@ -55,9 +56,10 @@ resource "aws_subnet" "public_subnet_1" {
 
 # Public subnet 2
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id            = aws_vpc.vpc_main.id
-  cidr_block        = var.public_subnet_2_cidr
-  availability_zone = data.aws_availability_zones.available.names[1]
+  vpc_id                  = aws_vpc.vpc_main.id
+  cidr_block              = var.public_subnet_2_cidr
+  availability_zone       = data.aws_availability_zones.available.names[1]
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "techcorp-public-subnet-2"
