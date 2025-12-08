@@ -322,3 +322,79 @@ resource "aws_vpc_security_group_egress_rule" "sg_egress_db" {
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
 }
+
+#####################################
+# EC2 Instances
+#####################################
+
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-x86_64"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+}
+
+resource "aws_instance" "instance_bastion" {
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = var.instance_type_bastion
+  subnet_id     = aws_subnet.public_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.sg_bastion.id]
+
+  tags = {
+    Name = "techcorp-ec2-bastion"
+  }
+}
+
+resource "aws_eip" "eip_bastion" {
+  domain   = "vpc"
+  instance = aws_instance.instance_bastion.id
+
+  tags = {
+    Name = "techcorp-eip-bastion"
+  }
+
+  depends_on = [aws_internet_gateway.igw]
+}
+
+resource "aws_instance" "instance_web_1" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type_web
+  subnet_id              = aws_subnet.private_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.sg_web.id]
+
+  tags = {
+    Name = "techcorp-ec2-web-1"
+  }
+}
+
+resource "aws_instance" "instance_web_2" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type_web
+  subnet_id              = aws_subnet.private_subnet_2.id
+  vpc_security_group_ids = [aws_security_group.sg_web.id]
+
+  tags = {
+    Name = "techcorp-ec2-web-2"
+  }
+}
+
+resource "aws_instance" "instance_db" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type_db
+  subnet_id              = aws_subnet.private_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.sg_db.id]
+
+  tags = {
+    Name = "techcorp-ec2-db"
+  }
+}

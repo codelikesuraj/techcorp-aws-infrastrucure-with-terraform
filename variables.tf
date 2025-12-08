@@ -38,3 +38,21 @@ variable "my_ip" {
   description = "Public IP address for SSH access to bastion (format: #.#.#.#/32)"
   type        = string
 }
+
+variable "instance_type_bastion" {
+  description = "Instance type for Bastion Host"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "instance_type_web" {
+  description = "Instance type for Web Servers"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "instance_type_db" {
+  description = "Instance type for Database"
+  type        = string
+  default     = "t3.small"
+}
