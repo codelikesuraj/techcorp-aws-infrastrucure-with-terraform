@@ -345,9 +345,9 @@ data "aws_ami" "amazon_linux" {
 }
 
 resource "aws_instance" "instance_bastion" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = var.instance_type_bastion
-  subnet_id     = aws_subnet.public_subnet_1.id
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = var.instance_type_bastion
+  subnet_id              = aws_subnet.public_subnet_1.id
   vpc_security_group_ids = [aws_security_group.sg_bastion.id]
 
   tags = {
