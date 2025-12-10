@@ -1,8 +1,10 @@
+*.swp
+.idea/
+.ssh/
 .terraform/
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
-terraform.tfstate
-
 .vscode/
-.idea/
-*.swp
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

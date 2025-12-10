@@ -324,6 +324,32 @@ resource "aws_vpc_security_group_egress_rule" "sg_egress_db" {
 }
 
 #####################################
+# SSH Key
+#####################################
+
+resource "tls_private_key" "tls_pk_techcorp" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "key_pair_techcorp" {
+  key_name   = "techcorp-key"
+  public_key = tls_private_key.tls_pk_techcorp.public_key_openssh
+}
+
+resource "local_file" "techcorp_key_public" {
+  content         = tls_private_key.tls_pk_techcorp.public_key_openssh
+  filename        = "${path.module}/.ssh/techcorp-key.pub"
+  file_permission = "0400"
+}
+
+resource "local_file" "techcorp_key_private" {
+  content         = tls_private_key.tls_pk_techcorp.private_key_pem
+  filename        = "${path.module}/.ssh/techcorp-key.pem"
+  file_permission = "0400"
+}
+
+#####################################
 # EC2 Instances
 #####################################
 
@@ -349,6 +375,7 @@ resource "aws_instance" "instance_bastion" {
   instance_type          = var.instance_type_bastion
   subnet_id              = aws_subnet.public_subnet_1.id
   vpc_security_group_ids = [aws_security_group.sg_bastion.id]
+  key_name               = aws_key_pair.key_pair_techcorp.key_name
 
   tags = {
     Name = "techcorp-ec2-bastion"
@@ -370,6 +397,7 @@ resource "aws_instance" "instance_web_1" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type_web
   subnet_id              = aws_subnet.private_subnet_1.id
+  key_name               = aws_key_pair.key_pair_techcorp.key_name
   vpc_security_group_ids = [aws_security_group.sg_web.id]
 
   tags = {
@@ -381,6 +409,7 @@ resource "aws_instance" "instance_web_2" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type_web
   subnet_id              = aws_subnet.private_subnet_2.id
+  key_name               = aws_key_pair.key_pair_techcorp.key_name
   vpc_security_group_ids = [aws_security_group.sg_web.id]
 
   tags = {
@@ -392,6 +421,7 @@ resource "aws_instance" "instance_db" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type_db
   subnet_id              = aws_subnet.private_subnet_1.id
+  key_name               = aws_key_pair.key_pair_techcorp.key_name
   vpc_security_group_ids = [aws_security_group.sg_db.id]
 
   tags = {

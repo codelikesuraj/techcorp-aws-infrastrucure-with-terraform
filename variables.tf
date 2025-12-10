@@ -1,7 +1,6 @@
 variable "region" {
   description = "AWS region to deploy resources in"
   type        = string
-  default     = "us-east-1"
 }
 
 variable "vpc_cidr" {
@@ -42,17 +41,14 @@ variable "my_ip" {
 variable "instance_type_bastion" {
   description = "Instance type for Bastion Host"
   type        = string
-  default     = "t3.micro"
 }
 
 variable "instance_type_web" {
   description = "Instance type for Web Servers"
   type        = string
-  default     = "t3.micro"
 }
 
 variable "instance_type_db" {
   description = "Instance type for Database"
   type        = string
-  default     = "t3.small"
 }

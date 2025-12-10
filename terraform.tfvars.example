@@ -1,0 +1,7 @@
+instance_type_bastion = "t3.micro"
+instance_type_db = "t3.small"
+instance_type_web = "t3.micro"
+
+my_ip = "IP_ADDRESS/32"
+
+region = "us-east-1"
